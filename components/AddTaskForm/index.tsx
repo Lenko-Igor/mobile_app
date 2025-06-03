@@ -9,7 +9,9 @@ import { Button, StyleSheet, Text, View, ViewProps } from 'react-native'
 import InputForm from '../InputForm'
 import ThemedView from '../templates/ThemedView'
 import { formConfig } from './addTaskForm.config'
+import { FIELD_NAME } from './addTaskForm.constants'
 import { schema } from './addTaskForm.schema'
+
 export type AddTaskFormType = ViewProps & {
   lightColor?: string
   darkColor?: string
@@ -17,14 +19,20 @@ export type AddTaskFormType = ViewProps & {
 
 type FormValuesType = Omit<TaskType, 'id' | 'status' | 'createDate'>
 
-const AddTaskForm: FC = ({ lightColor, darkColor }: AddTaskFormType) => {
+const AddTaskForm: FC<AddTaskFormType> = ({ lightColor, darkColor }) => {
   const { tasks, addTask } = useContext(TasksContext)
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      [FIELD_NAME.TITLE]: '',
+      [FIELD_NAME.DESCRIPTION]: '',
+      [FIELD_NAME.LOCATION]: '',
+    },
   })
   const textColor = useThemeColor(
     { light: lightColor, dark: darkColor },
@@ -43,6 +51,7 @@ const AddTaskForm: FC = ({ lightColor, darkColor }: AddTaskFormType) => {
         ...data,
       },
     ])
+    reset()
   }
 
   return (
@@ -52,13 +61,14 @@ const AddTaskForm: FC = ({ lightColor, darkColor }: AddTaskFormType) => {
           key={id}
           control={control}
           name={name}
-          render={({ field: { onChange } }) => (
+          render={({ field }) => (
             <View>
               <InputForm
                 label={label}
                 placeholder={placeholder}
                 placeholderTextColor={textColor}
-                onChangeText={onChange}
+                onChangeText={field.onChange}
+                {...field}
               />
               {errors[name] && (
                 <Text style={styles.error}>{errors[name].message}</Text>

@@ -19,12 +19,6 @@ export const formConfig = [
   },
   {
     id: '3',
-    name: FIELD_NAME.DATE,
-    label: FIELD_LABEL.DATE,
-    placeholder: FIELD_PLACEHOLDER.DATE,
-  },
-  {
-    id: '4',
     name: FIELD_NAME.LOCATION,
     label: FIELD_LABEL.LOCATION,
     placeholder: FIELD_PLACEHOLDER.LOCATION,

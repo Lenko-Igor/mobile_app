@@ -1,5 +1,6 @@
 import { Colors } from '@/constants/Colors'
 import { TasksContext } from '@/contexts/tasksContext'
+import { StatusEnum } from '@/types/enums'
 import { TaskType } from '@/types/types'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import dayjs from 'dayjs'
@@ -7,7 +8,6 @@ import { FC, useContext } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import DropDown from '../DropDown'
 import { ThemedText } from '../templates/ThemedText'
-import { StatusEnum } from '@/types/enums'
 
 type ItemPropsType = {
   item: TaskType
@@ -27,15 +27,17 @@ const Item: FC<ItemPropsType> = ({
     <View style={[styles.item, { backgroundColor }]}>
       <View style={styles.card}>
         <View style={{ flex: 3, justifyContent: 'space-between' }}>
-          <View>
+          <View style={{ flex: 1, gap: 4 }}>
             <ThemedText
               type="subtitle"
+              numberOfLines={2}
               style={[styles.title, { color: textColor }]}
             >
               {item.title ?? ''}
             </ThemedText>
             <ThemedText
               type="default"
+              numberOfLines={2}
               style={[styles.description, { color: textColor }]}
             >
               {item.description ?? ''}
@@ -84,10 +86,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 4,
   },
-  title: {},
+  title: {
+    width: 180,
+    lineHeight: 18,
+    fontSize: 16,
+  },
   description: {
     lineHeight: 14,
     fontSize: 12,
+    width: 200,
   },
   actions: {
     flex: 1,

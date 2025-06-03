@@ -13,7 +13,7 @@ import { TasksContext } from '@/contexts/tasksContext'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import localStorageStore from '@/store/localStorage.store'
 import { StatusEnum } from '@/types/enums'
-import { TaskType } from '@/types/types'
+import { OrderType, TaskType } from '@/types/types'
 
 const RootLayout: FC = () => {
   const colorScheme = useColorScheme()
@@ -28,8 +28,8 @@ const RootLayout: FC = () => {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   })
 
-  const setDataFromStorage = async () => {
-    const result = await getTasksDataFromStorage()
+  const setDataFromStorage = async (order?: OrderType) => {
+    const result = await getTasksDataFromStorage(order)
     setData(result)
   }
 
@@ -59,7 +59,13 @@ const RootLayout: FC = () => {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <TasksContext.Provider
-        value={{ tasks: data, addTask, removeTask, updateTaskStatus }}
+        value={{
+          tasks: data,
+          addTask,
+          removeTask,
+          updateTaskStatus,
+          getTasksData: setDataFromStorage,
+        }}
       >
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

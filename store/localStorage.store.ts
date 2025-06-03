@@ -1,15 +1,16 @@
+import { sortTasksByCreateDate } from '@/helpers/helpers'
 import { LOCAL_STORAGE_KEY } from '@/constants/general'
 import { StatusEnum } from '@/types/enums'
-import { TaskType } from '@/types/types'
+import { OrderType, TaskType } from '@/types/types'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 class LocalStorageStore {
-  getTasksDataFromStorage = async (): Promise<TaskType[]> => {
+  getTasksDataFromStorage = async (order?: OrderType): Promise<TaskType[]> => {
     try {
       const response = await AsyncStorage.getItem(LOCAL_STORAGE_KEY)
       const data: TaskType[] = response != null ? JSON.parse(response) : []
 
-      return data
+      return data.sort(sortTasksByCreateDate(order ?? 'asc'))
     } catch (error) {
       console.log('getTasksDataFromStorage', error)
       return []

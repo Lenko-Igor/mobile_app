@@ -6,6 +6,7 @@ const initValue: TaskContextValueType = {
   addTask: () => {},
   removeTask: () => {},
   updateTaskStatus: () => {},
+  getTasksData: () => {},
 }
 
 export const TasksContext = createContext<TaskContextValueType>(initValue)

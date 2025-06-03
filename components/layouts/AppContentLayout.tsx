@@ -24,11 +24,16 @@ const AppContentLayout: FC<AppContentLayoutType> = ({
     { light: lightColor, dark: darkColor },
     'background'
   )
+  const titleColor = useThemeColor({}, 'titlePage')
 
   return (
     <SafeAreaProvider style={{ backgroundColor }}>
       <SafeAreaView style={styles.container}>
-        {title && <ThemedText type="title">{title}</ThemedText>}
+        {title && (
+          <ThemedText type="title" style={{ color: titleColor }}>
+            {title}
+          </ThemedText>
+        )}
         {children}
       </SafeAreaView>
     </SafeAreaProvider>
