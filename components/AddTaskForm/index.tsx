@@ -1,22 +1,24 @@
-import React, { FC, useContext } from 'react'
-import ThemedView from '../templates/ThemedView'
-import { Button, StyleSheet, View, ViewProps, Text } from 'react-native'
-import { formConfig } from './addTaskForm.config'
-import { Controller, useForm } from 'react-hook-form'
-import InputForm from '../InputForm'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { schema } from './addTaskForm.schema'
-import { useAsyncStorage } from '@react-native-async-storage/async-storage'
-import { LOCAL_STORAGE_KEY } from '@/constants/general'
 import { TasksContext } from '@/contexts/tasksContext'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { StatusEnum } from '@/types/enums'
+import { TaskType } from '@/types/types'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { FC, useContext } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { Button, StyleSheet, Text, View, ViewProps } from 'react-native'
+import InputForm from '../InputForm'
+import ThemedView from '../templates/ThemedView'
+import { formConfig } from './addTaskForm.config'
+import { schema } from './addTaskForm.schema'
 export type AddTaskFormType = ViewProps & {
   lightColor?: string
   darkColor?: string
 }
+
+type FormValuesType = Omit<TaskType, 'id' | 'status' | 'createDate'>
+
 const AddTaskForm: FC = ({ lightColor, darkColor }: AddTaskFormType) => {
-  const [context, setData] = useContext(TasksContext)
-  const { getItem, setItem } = useAsyncStorage(LOCAL_STORAGE_KEY)
+  const { tasks, addTask } = useContext(TasksContext)
   const {
     control,
     handleSubmit,
@@ -28,18 +30,19 @@ const AddTaskForm: FC = ({ lightColor, darkColor }: AddTaskFormType) => {
     { light: lightColor, dark: darkColor },
     'text'
   )
-  console.log(context?.[1])
 
-  const onSubmit = async (data: any) => {
-    try {
-      const itemFromStorage = await getItem()
-      const result = itemFromStorage != null ? JSON.parse(itemFromStorage) : []
-      const jsonValue = JSON.stringify([...result, data])
-      await setItem(jsonValue)
-      context?.[1](result)
-    } catch (e) {
-      console.log(e)
-    }
+  const onSubmit: SubmitHandler<FormValuesType> = async (
+    data: FormValuesType
+  ) => {
+    addTask([
+      ...tasks,
+      {
+        id: `${Date.now()}`,
+        status: StatusEnum.InProgress,
+        createDate: new Date(),
+        ...data,
+      },
+    ])
   }
 
   return (
@@ -64,7 +67,12 @@ const AddTaskForm: FC = ({ lightColor, darkColor }: AddTaskFormType) => {
           )}
         />
       ))}
-      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+      <Button
+        title="Submit"
+        onPress={handleSubmit(
+          onSubmit as SubmitHandler<{ [x: string]: string }>
+        )}
+      />
     </ThemedView>
   )
 }

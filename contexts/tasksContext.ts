@@ -1,5 +1,11 @@
-import { createContext, Dispatch, SetStateAction } from 'react'
+import { TaskContextValueType } from '@/types/types'
+import { createContext } from 'react'
 
-export const TasksContext = createContext<
-  [[], React.Dispatch<React.SetStateAction<[]>>] | undefined
->(undefined)
+const initValue: TaskContextValueType = {
+  tasks: [],
+  addTask: () => {},
+  removeTask: () => {},
+  updateTaskStatus: () => {},
+}
+
+export const TasksContext = createContext<TaskContextValueType>(initValue)
