@@ -1,9 +1,9 @@
-import { FC } from 'react';
-import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { FC } from 'react'
+import { Link, Stack } from 'expo-router'
+import { StyleSheet } from 'react-native'
 
-import { ThemedText } from '@/components/templates/ThemedText';
-import ThemedView from '@/components/templates/ThemedView';
+import { ThemedText } from '@/components/templates/ThemedText'
+import ThemedView from '@/components/templates/ThemedView'
 
 const NotFoundScreen: FC = () => {
   return (
@@ -16,10 +16,10 @@ const NotFoundScreen: FC = () => {
         </Link>
       </ThemedView>
     </>
-  );
+  )
 }
 
-export default NotFoundScreen;
+export default NotFoundScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingVertical: 15,
   },
-});
+})
